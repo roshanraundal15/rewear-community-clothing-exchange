@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">Featured Items</h2>
+<div class="row">
+  {% for item in items %}
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm">
+        <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.title }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ item.title }}</h5>
+          <p class="card-text">{{ item.get_type_display }} | {{ item.get_status_display }}</p>
+          <a href="{% url 'item_detail' item.id %}" class="btn btn-outline-primary btn-sm">View Item</a>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No featured items available.</p>
+  {% endfor %}
+</div>
+{% endblock %}

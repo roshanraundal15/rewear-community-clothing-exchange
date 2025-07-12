@@ -1,0 +1,64 @@
+<!-- core/templates/core/dashboard.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Welcome, {{ user.username }}!</h2>
+    <p>Points: {{ request.user.userprofile.points }}</p>
+
+    <h3 class="mt-4">My Listings</h3>
+    {% if items %}
+        <div class="row">
+            {% for item in items %}
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                        <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.title }}</h5>
+                            <p>Status: {{ item.status }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="alert alert-secondary">No items listed.</p>
+    {% endif %}
+
+    <h3 class="mt-4">Incoming Swap Requests</h3>
+    {% if incoming %}
+        {% for swap in incoming %}
+            <div class="card mb-2">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <span>{{ swap.requester.username }} wants to swap for your item <strong>{{ swap.item.title }}</strong></span>
+                    {% if swap.status == 'pending' %}
+                        <div>
+                            <a href="{% url 'respond_request' swap.id 'accept' %}" class="btn btn-success btn-sm">Accept</a>
+                            <a href="{% url 'respond_request' swap.id 'reject' %}" class="btn btn-danger btn-sm">Reject</a>
+                        </div>
+                    {% else %}
+                        <span class="badge bg-secondary text-capitalize">{{ swap.status }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="alert alert-secondary">No incoming requests.</p>
+    {% endif %}
+
+    <h3 class="mt-4">Outgoing Requests</h3>
+    {% if outgoing %}
+        {% for swap in outgoing %}
+            <div class="card mb-2">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <span>You requested <strong>{{ swap.item.title }}</strong> from {{ swap.item.uploader.username }}</span>
+                    <span class="badge bg-info text-dark text-capitalize">{{ swap.status }}</span>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="alert alert-secondary">No outgoing requests.</p>
+    {% endif %}
+</div>
+{% endblock %}

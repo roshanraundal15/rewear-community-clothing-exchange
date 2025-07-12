@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Swap Requests for "{{ item.title }}"</h2>
+
+{% if my_items is not None %}
+  {% if my_items %}
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="offered_item">Select one of your items to offer in swap:</label>
+        <select name="offered_item" id="offered_item" class="form-control" required>
+          {% for my_item in my_items %}
+            <option value="{{ my_item.id }}">{{ my_item.title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary mt-2">Send Swap Request</button>
+    </form>
+  {% else %}
+    <p>You have no available items to offer for a swap.</p>
+  {% endif %}
+{% elif requests %}
+  <ul class="list-group mt-3">
+    {% for req in requests %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <strong>{{ req.requester.username }}</strong> ({{ req.requester.email }})<br>
+          Offered: <strong>{{ req.offered_item.title }}</strong><br>
+          Status: {{ req.get_status_display }}
+        </div>
+        {% if req.status == "pending" %}
+          <div>
+            <a href="{% url 'respond_request' req.id 'accept' %}" class="btn btn-success btn-sm">Accept</a>
+            <a href="{% url 'respond_request' req.id 'reject' %}" class="btn btn-danger btn-sm">Reject</a>
+          </div>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No swap requests for this item.</p>
+{% endif %}
+{% endblock %}
