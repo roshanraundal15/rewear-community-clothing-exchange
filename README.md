@@ -159,16 +159,4 @@ We welcome contributions to enhance sustainable fashion! Feel free to submit pul
 
 ---
 
-## 📜 License
-
-This project is open-sourced under the MIT License.
-
----
-
-## 📞 Contact
-
-For support, feature requests, or feedback, please open an issue or contact the maintainer.
-
----
-
 **ReWear** — Redefining wardrobes, one swap at a time!
